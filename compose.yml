@@ -1,0 +1,46 @@
+services:
+  lucnv-chat-app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/var/www
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - lucnv-chat-db
+    networks:
+      - lucnv-chat-network
+
+  #Database
+  lucnv-chat-db:
+    image: mysql:8.0
+    ports:
+      - "3310:3306"
+    environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: lucnv_chat
+    networks:
+      - lucnv-chat-network
+
+  #Nginx
+  lucnv-chat-nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - lucnv-chat-app
+    networks:
+      - lucnv-chat-network
+
+  #Redis
+    lucnv-chat-redis:
+        image: redis:alpine
+        ports:
+        - "6379:6379"
+        networks:
+        - lucnv-chat-network
