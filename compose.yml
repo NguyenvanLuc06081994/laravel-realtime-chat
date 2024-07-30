@@ -3,25 +3,31 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
     ports:
-      - "9000:9000"
+      - "9009:9000"
     volumes:
       - .:/var/www
-    environment:
-      - NODE_ENV=development
+      - ./docker/php/supervisord.d/queue-worker.conf:/etc/supervisor/conf.d/queue-worker.conf
+      - ./docker/php/supervisord.d/schedule.conf:/etc/supervisor/conf.d/schedule.conf
+      - ./docker/php/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+
     depends_on:
       - lucnv-chat-db
+      - lucnv-chat-redis
     networks:
       - lucnv-chat-network
 
   #Database
   lucnv-chat-db:
     image: mysql:8.0
+    restart: unless-stopped
     ports:
       - "3310:3306"
     environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: lucnv_chat
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: Lucnv@12
+      MYSQL_DATABASE: lucnv_chat
     networks:
       - lucnv-chat-network
 
@@ -29,18 +35,40 @@ services:
   lucnv-chat-nginx:
     image: nginx:alpine
     ports:
-      - "8080:80"
+      - "8089:80"
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./logs:/var/log/nginx
+      - ./src:/var/www
+      - ./:/work/lucnv-chat:delegated
     depends_on:
       - lucnv-chat-app
     networks:
       - lucnv-chat-network
 
   #Redis
-    lucnv-chat-redis:
-        image: redis:alpine
-        ports:
-        - "6379:6379"
-        networks:
-        - lucnv-chat-network
+  lucnv-chat-redis:
+    image: redis:alpine
+    volumes:
+      - redis-store:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - lucnv-chat-network
+
+  #mailhog
+  mailhog:
+    image: mailhog/mailhog
+    container_name: laravel-mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - lucnv-chat-network
+
+volumes:
+  db-store:
+  redis-store:
+
+networks:
+    lucnv-chat-network:
+        driver: bridge

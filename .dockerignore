@@ -1,0 +1,4 @@
+vendor
+compose.yml
+nginx.conf
+.env*
