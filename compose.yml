@@ -61,7 +61,7 @@ services:
     image: mailhog/mailhog
     container_name: laravel-mailhog
     ports:
-      - "8025:8025"
+      - "8029:8025"
     networks:
       - lucnv-chat-network
 
