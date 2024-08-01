@@ -21,6 +21,13 @@ RUN apt-get update && apt-get install -y \
     && pecl install redis \
     && docker-php-ext-enable redis
 
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm -v \
+    && npm install -g yarn@latest \
+    && yarn -v
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -35,6 +42,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy existing application directory contents
 COPY ./../../ /var/www
+
+COPY --chown=www-data:www-data . /var/www
 
 # Copy supervisor config files
 COPY docker/php/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

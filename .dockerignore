@@ -18,7 +18,6 @@ storage/framework/views/
 
 # Ignore Docker files
 compose.yml
-docker/
 
 *.idea/
 *.vscode/
