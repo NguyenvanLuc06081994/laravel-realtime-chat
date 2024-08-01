@@ -21,11 +21,13 @@ services:
   #Database
   lucnv-chat-db:
     image: mysql:8.0
-    restart: unless-stopped
+    restart: always
+    volumes:
+      - db-store:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - "3310:3306"
     environment:
-      MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: Lucnv@12
       MYSQL_DATABASE: lucnv_chat
     networks:

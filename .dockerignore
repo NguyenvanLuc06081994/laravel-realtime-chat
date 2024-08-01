@@ -1,4 +1,25 @@
-vendor
+# Ignore node_modules
+node_modules/
+
+# Ignore Composer vendor
+vendor/
+
+# Ignore Laravel log files
+storage/logs/
+
+# Ignore Laravel cache files
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+
+# Ignore environment files
+.env
+.env.*.backup
+
+# Ignore Docker files
 compose.yml
-nginx.conf
-.env*
+docker/
+
+*.idea/
+*.vscode/
+*.sublime*
