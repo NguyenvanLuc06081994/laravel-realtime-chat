@@ -41,7 +41,7 @@ WORKDIR /var/www
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy existing application directory contents
-COPY ./../../ /var/www
+COPY . /var/www
 
 COPY --chown=www-data:www-data . /var/www
 
