@@ -6,6 +6,7 @@ services:
     restart: unless-stopped
     ports:
       - "9009:9000"
+      - "5173:5173"
     volumes:
       - .:/var/www
       - ./docker/php/supervisord.d/queue-worker.conf:/etc/supervisor/conf.d/queue-worker.conf
