@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import {defineConfig} from "vite";
 import laravel from "laravel-vite-plugin";
 import path from "path";
 import tailwindcss from "tailwindcss";
@@ -22,10 +22,10 @@ export default defineConfig({
                 },
             },
         }),
-        
+
         {
             name: "blade",
-            handleHotUpdate({ file, server }) {
+            handleHotUpdate({file, server}) {
                 if (file.endsWith(".blade.php")) {
                     server.ws.send({
                         type: "full-reload",
@@ -38,7 +38,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': '/themes/tailwind/js',
-            
+
         }
     },
     css: {
@@ -50,4 +50,11 @@ export default defineConfig({
             ],
         },
     },
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            clientPort: 5173,
+            host: 'localhost',
+        },
+    }
 });
