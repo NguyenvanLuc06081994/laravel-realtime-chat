@@ -28,5 +28,6 @@
                 </div>
             </div>
         </div>
+        <dash-board :current-user="{{ auth()->user() }}"></dash-board>
     </div>
 </x-app-layout>

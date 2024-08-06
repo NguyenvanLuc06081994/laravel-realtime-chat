@@ -89,30 +89,31 @@ const sendMessage = () => {
 };
 
 const sendTypingEvent = () => {
-    // Echo.private(`chat.${props.friend.id}`).whisper("typing", {
-    //     userID: props.currentUser.id,
-    // });
+    Echo.private(`chat.${props.friend.id}`).whisper("typing", {
+        userID: props.currentUser.id,
+    });
 };
 
 onMounted(() => {
     axios.get(`/messages/${props.friend.id}`).then((response) => {
+        console.log(response.data);
         messages.value = response.data;
     });
 
-    // Echo.private(`chat.${props.currentUser.id}`)
-    //     .listen("MessageSent", (response) => {
-    //         messages.value.push(response.message);
-    //     })
-    //     .listenForWhisper("typing", (response) => {
-    //         isFriendTyping.value = response.userID === props.friend.id;
-    //
-    //         if (isFriendTypingTimer.value) {
-    //             clearTimeout(isFriendTypingTimer.value);
-    //         }
-    //
-    //         isFriendTypingTimer.value = setTimeout(() => {
-    //             isFriendTyping.value = false;
-    //         }, 1000);
-    //     });
+    Echo.private(`chat.${props.currentUser.id}`)
+        .listen("MessageSent", (response) => {
+            messages.value.push(response.message);
+        })
+        .listenForWhisper("typing", (response) => {
+            isFriendTyping.value = response.userID === props.friend.id;
+
+            if (isFriendTypingTimer.value) {
+                clearTimeout(isFriendTypingTimer.value);
+            }
+
+            isFriendTypingTimer.value = setTimeout(() => {
+                isFriendTyping.value = false;
+            }, 1000);
+        });
 });
 </script>

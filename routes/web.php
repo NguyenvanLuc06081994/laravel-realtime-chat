@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessageSent;
 use App\Models\ChatMessage;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -32,11 +33,15 @@ Route::get('messages/{friend}', function (User $friend) {
 })->middleware(['auth']);
 
 Route::post('messages/{friend}', function (User $friend) {
-    return ChatMessage::query()->create([
+    $message = ChatMessage::query()->create([
         'sender_id' => auth()->id(),
         'receiver_id' => $friend->id,
         'text' => request('message')
     ]);
+
+    broadcast(new MessageSent($message));
+
+    return $message;
 })->middleware(['auth']);
 
 require __DIR__ . '/auth.php';

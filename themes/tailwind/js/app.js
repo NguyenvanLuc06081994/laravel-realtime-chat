@@ -28,8 +28,10 @@ const app = createApp({});
 // }
 
 import ChatComponent from "./components/ChatComponent.vue";
+import DashBoard from "./components/DashBoard.vue";
 
 app.component("chat-component", ChatComponent);
+app.component("dash-board", DashBoard);
 
 /**
  * Next, attach Vue application instance to the page. Then, you may begin adding components to this application

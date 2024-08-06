@@ -7,6 +7,8 @@ services:
     ports:
       - "9009:9000"
       - "5173:5173"
+      - "6001:6001"
+      - "8080:8080"
     volumes:
       - .:/var/www
       - ./docker/php/supervisord.d/queue-worker.conf:/etc/supervisor/conf.d/queue-worker.conf
@@ -73,5 +75,5 @@ volumes:
   redis-store:
 
 networks:
-    lucnv-chat-network:
-        driver: bridge
+  lucnv-chat-network:
+    driver: bridge
